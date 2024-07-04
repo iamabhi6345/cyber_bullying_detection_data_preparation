@@ -13,7 +13,7 @@ def process_data(config: DataProcessingConfig) -> None:
     dvc_remote_repo=config.dvc_remote_repo,
     dvc_data_folder=config.dvc_data_folder,
     github_user_name=config.github_user_name,
-    github_access_token="YOUR OWN GITHUB ACCESS TOKEN"
+    github_access_token="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"
     )
 
 
