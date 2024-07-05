@@ -139,11 +139,11 @@ class SpellCorrectionDatasetCleaner(DatasetCleaner):
 #         return self.clean_text(text).split()
 
 
-# class DatasetCleanerManager:
-#     def __init__(self, dataset_cleaners: dict[str, DatasetCleaner]) -> None:
-#         self.dataset_cleaners = dataset_cleaners
+class DatasetCleanerManager:
+    def __init__(self, dataset_cleaners: dict[str, DatasetCleaner]) -> None:
+        self.dataset_cleaners = dataset_cleaners
 
-#     def __call__(self, text: str | list[str]) -> str | list[str]:
-#         for dataset_cleaner in self.dataset_cleaners.values():
-#             text = dataset_cleaner(text)
-#         return text
+    def __call__(self, text: str | list[str]) -> str | list[str]:
+        for dataset_cleaner in self.dataset_cleaners.values():
+            text = dataset_cleaner(text)
+        return text
