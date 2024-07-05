@@ -19,7 +19,7 @@ def process_data(config: DataProcessingConfig) -> None:
     dvc_remote_repo=config.dvc_remote_repo,
     dvc_data_folder=config.dvc_data_folder,
     github_user_name=config.github_user_name,
-    github_access_token="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"
+    github_access_token="SECRET KEY"
     )
     
     dataset_reader_manager = instantiate(config.dataset_reader_manager)
