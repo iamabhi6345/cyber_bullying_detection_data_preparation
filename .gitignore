@@ -139,4 +139,3 @@ dmypy.json
 
 data/
 ./abhishek/process_data.py
-./notebooks/check_stuff.ipynb 
