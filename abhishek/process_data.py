@@ -19,13 +19,24 @@ def process_data(config: DataProcessingConfig) -> None:
     dvc_remote_repo=config.dvc_remote_repo,
     dvc_data_folder=config.dvc_data_folder,
     github_user_name=config.github_user_name,
-    github_access_token="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"
+    github_access_token="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"
     )
     
     dataset_reader_manager = instantiate(config.dataset_reader_manager)
-    df  = dataset_reader_manager.read_data()
-    print(df.head())
-    print(df["dataset_name"].unique().compute())
+    dataset_cleaner_manager = instantiate(config.dataset_cleaner_manager)
+    
+    df = dataset_reader_manager.read_data().compute()
+    sample_df = df.sample(n=5)
+
+    for _, row in sample_df.iterrows():
+        text = row["text"]
+        cleaned_text = dataset_cleaner_manager(text)
+        
+        print(60 * "#")
+        print(f"text={text}")
+        print(f"cleaned_text={cleaned_text}")
+        print(60 * "#")
+
 
 
 if __name__ == "__main__":
