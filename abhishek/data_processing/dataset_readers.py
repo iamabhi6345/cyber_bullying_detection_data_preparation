@@ -36,7 +36,7 @@ class DatasetReader(ABC):
         # self.version = version
 
     def read_data(self) -> dd.core.DataFrame:
-        # self.logger.info(f"Reading {self.__class__.__name__}")
+        self.logger.info(f"Reading {self.__class__.__name__}")
         train_df, dev_df, test_df = self._read_data()
         df = self.assign_split_names_to_data_frames_and_merge(train_df, dev_df, test_df)
         df["dataset_name"] = self.dataset_name
@@ -113,7 +113,7 @@ class GHCDatasetReader(DatasetReader):
         self.dev_split_ratio = dev_split_ratio
 
     def _read_data(self) -> tuple[dd.core.DataFrame, dd.core.DataFrame, dd.core.DataFrame]:
-        self.logger.info("Reading GHC Dataset")
+       
         train_tsv_path = os.path.join(self.dataset_dir, "ghc_train.tsv")
         # train_tsv_url = self.get_remote_data_url(train_tsv_path)
         train_df = dd.read_csv(train_tsv_path, sep="\t", header=0)
@@ -160,7 +160,7 @@ class JigsawToxicCommentsDatasetReader(DatasetReader):
         self.columns_for_label = ["toxic", "severe_toxic", "obscene", "threat", "insult", "identity_hate"]
 
     def _read_data(self) -> tuple[dd.core.DataFrame, dd.core.DataFrame, dd.core.DataFrame]:
-        self.logger.info(f"Reading {self.__class__.__name__}")
+       
         test_csv_path = os.path.join(self.dataset_dir, "test.csv")
         # test_csv_url = self.get_remote_data_url(test_csv_path)
         test_df = dd.read_csv(test_csv_path)
@@ -190,6 +190,49 @@ class JigsawToxicCommentsDatasetReader(DatasetReader):
         df = df.rename(columns={"comment_text": "text"})
         return df
 
+
+
+
+
+
+
+class TwitterDatasetReader(DatasetReader):
+    def __init__(
+        self,
+        dataset_dir: str,
+        dataset_name: str,
+        dev_split_ratio: float,
+        test_split_ratio: float,
+        # gcp_project_id: str,
+        # gcp_github_access_token_secret_id: str,
+        # dvc_remote_repo: str,
+        # github_user_name: str,
+        # version: str,
+    ) -> None:
+        super().__init__(
+            dataset_dir,
+            dataset_name,
+            # gcp_project_id,
+            # gcp_github_access_token_secret_id,
+            # dvc_remote_repo,
+            # github_user_name,
+            # version,
+        )
+        self.dev_split_ratio = dev_split_ratio
+        self.test_split_ratio = test_split_ratio
+
+    def _read_data(self) -> tuple[dd.core.DataFrame, dd.core.DataFrame, dd.core.DataFrame]:
+
+        train_csv_path = os.path.join(self.dataset_dir, "cyberbullying_tweets.csv")
+        # train_csv_url = self.get_remote_data_url(train_csv_path)
+        df = dd.read_csv(train_csv_path)
+        df = df.rename(columns={"tweet_text": "text", "cyberbullying_type": "label"})
+        df["label"] = (df["label"] != "not_cyberbullying").astype(int)
+
+        train_df, test_df = self.split_dataset(df, self.test_split_ratio, stratify_column="label")
+        train_df, dev_df = self.split_dataset(train_df, self.dev_split_ratio, stratify_column="label")
+
+        return train_df, dev_df, test_df
 
 
 
