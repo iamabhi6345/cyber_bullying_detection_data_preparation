@@ -6,6 +6,8 @@ from abhishek.utils.data_utils import get_raw_data_with_version
 
 @get_config(config_path="../configs", config_name="data_processing_config")
 def process_data(config: DataProcessingConfig) -> None: 
+    print(config)
+    return 
    
     get_raw_data_with_version(
     version=config.version,

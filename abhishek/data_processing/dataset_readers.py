@@ -26,7 +26,7 @@ class DatasetReader(ABC):
         # github_user_name: str,
         # version: str,
     ) -> None:
-        # self.logger = get_logger(self.__class__.__name__)
+        self.logger = get_logger(self.__class__.__name__)
         self.dataset_dir = dataset_dir
         self.dataset_name = dataset_name
         self.logger = get_logger(self.__class__.__name__)
@@ -38,7 +38,7 @@ class DatasetReader(ABC):
     def read_data(self) -> dd.core.DataFrame:
         # self.logger.info(f"Reading {self.__class__.__name__}")
         train_df, dev_df, test_df = self._read_data()
-        # df = self.assign_split_names_to_data_frames_and_merge(train_df, dev_df, test_df)
+        df = self.assign_split_names_to_data_frames_and_merge(train_df, dev_df, test_df)
         df["dataset_name"] = self.dataset_name
         if any(required_column not in df.columns.values for required_column in self.required_columns):
             raise ValueError(f"Dataset must contain all required columns: {self.required_columns}")
@@ -142,17 +142,20 @@ class DatasetReaderManager:
     def __init__(
         self,
         dataset_readers: dict[str, DatasetReader],
-        repartition: bool = True,
-        available_memory: Optional[float] = None,
+        # repartition: bool = True,
+        # available_memory: Optional[float] = None,
     ) -> None:
         self.dataset_readers = dataset_readers
-        self.repartition = repartition
-        self.available_memory = available_memory
+        # self.repartition = repartition
+        # self.available_memory = available_memory
 
-    def read_data(self, nrof_workers: int) -> dd.core.DataFrame:
+    def read_data(self
+                #   , nrof_workers: int
+                  ) -> dd.core.DataFrame:
         dfs = [dataset_reader.read_data() for dataset_reader in self.dataset_readers.values()]
-        df: dd.core.DataFrame = dd.concat(dfs)  # type: ignore
-        if self.repartition:
-            df = repartition_dataframe(df, nrof_workers=nrof_workers, available_memory=self.available_memory)
+        # df: dd.core.DataFrame = dd.concat(dfs)  # type: ignore
+        # if self.repartition:
+        #     df = repartition_dataframe(df, nrof_workers=nrof_workers, available_memory=self.available_memory)
 
+        df = dd.concat(dfs) 
         return df
