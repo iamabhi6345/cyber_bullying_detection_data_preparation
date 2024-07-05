@@ -72,10 +72,10 @@ class SpellCorrectionDatasetCleanerConfig(DatasetCleanerConfig):
     spell_correction_model: SpellCorrectionModelConfig = SpellCorrectionModelConfig()
 
 
-# @dataclass
-# class CharacterLimiterDatasetCleanerConfig(DatasetCleanerConfig):
-#     _target_: str = "abhishek.data_processing.dataset_cleaners.CharacterLimiterDatasetCleaner"
-#     character_limit: int = 300
+@dataclass
+class CharacterLimiterDatasetCleanerConfig(DatasetCleanerConfig):
+    _target_: str = "abhishek.data_processing.dataset_cleaners.CharacterLimiterDatasetCleaner"
+    character_limit: int = 300
 
 
 @dataclass
@@ -145,11 +145,11 @@ def setup_config() -> None:
         node=SpellCorrectionDatasetCleanerConfig,
     )
 
-    # cs.store(
-    #     group="dataset_cleaner_manager/dataset_cleaner",
-    #     name="character_limiter_dataset_cleaner_schema",
-    #     node=CharacterLimiterDatasetCleanerConfig,
-    # )
+    cs.store(
+        group="dataset_cleaner_manager/dataset_cleaner",
+        name="character_limiter_dataset_cleaner_schema",
+        node=CharacterLimiterDatasetCleanerConfig,
+    )
 
     cs.store(
         group="dataset_cleaner_manager", 

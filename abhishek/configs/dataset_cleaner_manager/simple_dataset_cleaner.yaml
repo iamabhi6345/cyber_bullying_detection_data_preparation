@@ -1,6 +1,7 @@
 defaults:
   - dataset_cleaner_manager_schema
 
+  # - dataset_cleaner@dataset_cleaners.character_limit: character_limit_280
   - dataset_cleaner@dataset_cleaners.stop_words: stop_words_dataset_cleaner_schema
   - dataset_cleaner@dataset_cleaners.to_lower_case: to_lower_case_dataset_cleaner_schema
   - dataset_cleaner@dataset_cleaners.url: url_dataset_cleaner_schema
