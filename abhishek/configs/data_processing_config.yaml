@@ -16,3 +16,5 @@ hydra:
   
 
 version: v3
+
+processed_data_save_dir: ./data/processed 

@@ -23,6 +23,8 @@ class DataProcessingConfig:
     
     dask_cluster: dask_cluster_schema.DaskClusterConfig = MISSING
     
+    processed_data_save_dir: str = MISSING
+    
 
 
 

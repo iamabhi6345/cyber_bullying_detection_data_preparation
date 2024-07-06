@@ -10,7 +10,7 @@ from dvc.api import get_url
 
 # from abhishek.utils.data_utils import get_repo_address_with_access_token, repartition_dataframe
 from abhishek.utils.utils import get_logger
-
+from abhishek.utils.data_utils import repartition_dataframe
 
 class DatasetReader(ABC):
     required_columns = {"text", "label", "split", "dataset_name"}
@@ -243,20 +243,22 @@ class DatasetReaderManager:
     def __init__(
         self,
         dataset_readers: dict[str, DatasetReader],
-        # repartition: bool = True,
+        repartition: bool = True,
         # available_memory: Optional[float] = None,
     ) -> None:
         self.dataset_readers = dataset_readers
-        # self.repartition = repartition
+        self.repartition = repartition
         # self.available_memory = available_memory
 
     def read_data(self
-                #   , nrof_workers: int
+                  , nrof_workers: int
                   ) -> dd.core.DataFrame:
         dfs = [dataset_reader.read_data() for dataset_reader in self.dataset_readers.values()]
-        # df: dd.core.DataFrame = dd.concat(dfs)  # type: ignore
-        # if self.repartition:
-        #     df = repartition_dataframe(df, nrof_workers=nrof_workers, available_memory=self.available_memory)
+        df: dd.core.DataFrame = dd.concat(dfs)  # type: ignore
+        if self.repartition:
+            df = repartition_dataframe(df, nrof_workers=nrof_workers,
+                                    #    available_memory=self.available_memory
+                                       )
 
-        df = dd.concat(dfs) 
+        
         return df
