@@ -28,6 +28,12 @@ export
 guard-%:
 	@#$(or ${$*}, $(error $* is not set))
 
+## Generate final config. CONFIG_NAME=<config_name> has to be providded. For overrides use: OVERRIDES=<overrides>
+generate-final-config: up guard-CONFIG_NAME
+	$(DOCKER_COMPOSE_EXEC) python ./abhishek/generate_final_config.py --config-name $${CONFIG_NAME} --overrides  $${OVERRIDES}
+
+
+
 ## Call entrypoint
 process-data: up
 	$(DOCKER_COMPOSE_EXEC) python ./abhishek/process_data.py
