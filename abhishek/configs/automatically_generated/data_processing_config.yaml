@@ -1,4 +1,4 @@
-version: v2
+version: v3
 data_local_save_dir: ./data/raw
 dvc_remote_repo: https://github.com/iamabhi6345/cyber_bullying_detection_dvc.git
 dvc_data_folder: data/raw
@@ -75,3 +75,5 @@ dask_cluster:
   interface: null
   worker_class: null
 processed_data_save_dir: ./data/processed
+docker_image_name: asia-south1-docker.pkg.dev/cyberbullying-428016/abhishek/abhishek-data-processing
+docker_image_tag: 1654b90d-3cfc-4bea-9290-3b61f1e14155

@@ -90,7 +90,7 @@
     
  
 from abhishek.config_schemas.data_processing_config_schema import DataProcessingConfig
-from abhishek.utils.config_utils import get_config
+from abhishek.utils.config_utils import get_config, get_pickle_config
 from abhishek.utils.gcp_utils import access_secret_version
 from abhishek.utils.data_utils import get_raw_data_with_version
 from hydra.utils import instantiate
@@ -108,8 +108,14 @@ def process_raw_data(
     processed_partition: dd.core.Series = df_partition["text"].apply(dataset_cleaner_manager)
     return processed_partition
 
-@get_config(config_path="../configs", config_name="data_processing_config")
+@get_pickle_config(config_path="abhishek/configs/automatically_generated", config_name="data_processing_config")
 def process_data(config: DataProcessingConfig) -> None: 
+    
+    
+    print("\n\n\nOkay\n\n")
+    print(config)
+    print("\n\n\nOkay\n\n")
+    return
     logger = get_logger(Path(__file__).name)
     logger.info("Processing raw data..")
     

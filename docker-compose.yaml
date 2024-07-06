@@ -5,9 +5,9 @@ services:
   app:
     user: "${USER_ID:-1000}"
     hostname: "${HOST_NAME:-abhishek}"
-    image: abhishek-data-preparation
+    image: abhishek-data-processing
     platform: linux/amd64
-    container_name: abhishek-data-preparation-container
+    container_name: abhishek-data-processing-container
     build:
       context: .
       dockerfile: ./docker/Dockerfile
