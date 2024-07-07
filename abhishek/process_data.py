@@ -112,10 +112,14 @@ def process_raw_data(
 def process_data(config: DataProcessingConfig) -> None: 
     
     
-    print("\n\n\nOkay\n\n")
-    print(config)
-    print("\n\n\nOkay\n\n")
-    return
+    # print("\n\n\nOkay\n\n")
+    # my_secret = access_secret_version(cyberbullying-428016,abhishek-secret )
+    # print(my_secret)
+    # return
+
+    # print(config)
+    # print("\n\n\nOkay\n\n")
+    # return
     logger = get_logger(Path(__file__).name)
     logger.info("Processing raw data..")
     
@@ -139,6 +143,11 @@ def process_data(config: DataProcessingConfig) -> None:
         dataset_cleaner_manager = instantiate(config.dataset_cleaner_manager)
         
         df = dataset_reader_manager.read_data(config.dask_cluster.n_workers)
+        
+        print(df.compute().head())
+        exit(0)
+        
+        
         logger.info(f"Number of partitions: {df.npartitions}")
 
         # Optimize data types (example for integer columns)
