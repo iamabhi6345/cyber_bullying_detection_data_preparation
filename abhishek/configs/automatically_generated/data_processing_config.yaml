@@ -43,6 +43,7 @@ dataset_reader_manager:
       dev_split_ratio: 0.25
       test_split_ratio: 0.2
   repartition: true
+  available_memory: 3750000000.0
 dataset_cleaner_manager:
   _target_: abhishek.data_processing.dataset_cleaners.DatasetCleanerManager
   dataset_cleaners:
@@ -91,4 +92,4 @@ dask_cluster:
   worker_class: null
 processed_data_save_dir: ./data/processed
 docker_image_name: asia-south1-docker.pkg.dev/cyberbullying-428016/abhishek/abhishek-data-processing
-docker_image_tag: ed1d9008-b9b6-4425-9b16-b97763842d62
+docker_image_tag: 33defb93-0d9a-4483-8c22-4a0540d948fa

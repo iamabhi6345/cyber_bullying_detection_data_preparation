@@ -244,11 +244,11 @@ class DatasetReaderManager:
         self,
         dataset_readers: dict[str, DatasetReader],
         repartition: bool = True,
-        # available_memory: Optional[float] = None,
+        available_memory: Optional[float] = None,
     ) -> None:
         self.dataset_readers = dataset_readers
         self.repartition = repartition
-        # self.available_memory = available_memory
+        self.available_memory = available_memory
 
     def read_data(self
                   , nrof_workers: int
@@ -257,7 +257,7 @@ class DatasetReaderManager:
         df: dd.core.DataFrame = dd.concat(dfs)  # type: ignore
         if self.repartition:
             df = repartition_dataframe(df, nrof_workers=nrof_workers,
-                                    #    available_memory=self.available_memory
+                                       available_memory=self.available_memory
                                        )
 
         

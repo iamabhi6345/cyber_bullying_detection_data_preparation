@@ -90,11 +90,11 @@
     
  
 from abhishek.config_schemas.data_processing_config_schema import DataProcessingConfig
-from abhishek.utils.config_utils import get_config, get_pickle_config
+from abhishek.utils.config_utils import get_config, get_pickle_config,custom_instantiate
 from abhishek.utils.gcp_utils import access_secret_version
 from abhishek.utils.data_utils import get_raw_data_with_version
 from hydra.utils import instantiate
-from dask.distributed import Client, LocalCluster  # Import LocalCluster
+from dask.distributed import Client, LocalCluster  
 from pathlib import Path
 from abhishek.utils.utils import get_logger
 import dask.dataframe as dd
@@ -120,41 +120,30 @@ def process_data(config: DataProcessingConfig) -> None:
     # print(config)
     # print("\n\n\nOkay\n\n")
     # return
+    
+    
     logger = get_logger(Path(__file__).name)
     logger.info("Processing raw data..")
     
     processed_data_save_dir = config.processed_data_save_dir
 
-    # Increase the memory limit for each worker and enable spilling to disk
-    cluster = LocalCluster(memory_limit='4GB', processes=True, dashboard_address=None)  # Adjust as needed
-    client = Client(cluster)
+    # for local dask cluster Increase the memory limit for each worker and enable spilling to disk
+    # cluster = LocalCluster(memory_limit='4GB', processes=True, dashboard_address=None)  # Adjust as needed
+  
+        # for GCP  
+    cluster = custom_instantiate(config.dask_cluster)
     
+    client = Client(cluster)  
+     
     try:
-        get_raw_data_with_version(
-            version=config.version,
-            data_local_save_dir=config.data_local_save_dir,
-            dvc_remote_repo=config.dvc_remote_repo,
-            dvc_data_folder=config.dvc_data_folder,
-            github_user_name=config.github_user_name,
-            github_access_token="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"
-        )
-        
         dataset_reader_manager = instantiate(config.dataset_reader_manager)
         dataset_cleaner_manager = instantiate(config.dataset_cleaner_manager)
         
         df = dataset_reader_manager.read_data(config.dask_cluster.n_workers)
         
-        print(df.compute().head())
-        exit(0)
+        # print(df.compute().head())
+        # exit(0)
         
-        
-        logger.info(f"Number of partitions: {df.npartitions}")
-
-        # Optimize data types (example for integer columns)
-        for col in df.columns:
-            if df[col].dtype == 'int64':
-                df[col] = df[col].astype('int32')
-
         logger.info("Cleaning data...")
         
         df = df.assign( 
@@ -188,6 +177,13 @@ def process_data(config: DataProcessingConfig) -> None:
         del test_df
         gc.collect()
 
+        logger.info("Data processing finished!")
+        docker_info = {"docker_image": config.docker_image_name, "docker_tag": config.docker_image_tag}
+        docker_info_save_path = os.path.join(processed_data_save_dir, "docker_info.yaml")
+
+        # write_yaml_file(docker_info_save_path, docker_info)
+        with open_file(docker_info_save_path ,"w")as f:
+            f.write(docker.info)
         logger.info("Data processing finished!")
 
     finally:
