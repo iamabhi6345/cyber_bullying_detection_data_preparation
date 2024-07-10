@@ -244,7 +244,7 @@ class DatasetReaderManager:
         self,
         dataset_readers: dict[str, DatasetReader],
         repartition: bool = True,
-        available_memory: Optional[float] = None,
+        available_memory: Optional[str] = None,
     ) -> None:
         self.dataset_readers = dataset_readers
         self.repartition = repartition

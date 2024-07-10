@@ -48,6 +48,10 @@ process-data: generate-final-data-processing-config push
 local-process-data: generate-final-data-processing-config
 	$(DOCKER_COMPOSE_EXEC) python ./abhishek/process_data.py
 
+## test Processes raw data
+test-process-data: up
+	$(DOCKER_COMPOSE_EXEC) python ./abhishek/process_data.py
+
 
 ## Push docker image to GCP artifact registery
 push: build

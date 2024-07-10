@@ -43,7 +43,7 @@ dataset_reader_manager:
       dev_split_ratio: 0.25
       test_split_ratio: 0.2
   repartition: true
-  available_memory: 3750000000.0
+  available_memory: null
 dataset_cleaner_manager:
   _target_: abhishek.data_processing.dataset_cleaners.DatasetCleanerManager
   dataset_cleaners:
@@ -74,22 +74,38 @@ dataset_cleaner_manager:
         prefix_length: 7
         count_threshold: 1
 dask_cluster:
-  _target_: dask.distributed.LocalCluster
-  n_workers: 8
-  memory_limit: auto
-  processes: true
-  threads_per_worker: 1
-  scheduler_port: 8786
-  silence_logs: 30
-  host: null
-  dashboard_address: :8787
-  asynchronous: false
-  blocked_handlers: null
-  service_kwargs: null
-  security: null
-  protocol: null
-  interface: null
-  worker_class: null
-processed_data_save_dir: ./data/processed
+  _target_: dask_cloudprovider.gcp.GCPCluster
+  n_workers: 1
+  projectid: cyberbullying-428016
+  zone: asia-south1-a
+  network: default
+  network_projectid: cyberbullying-428016
+  machine_type: n2-standard-2
+  source_image: projects/ubuntu-os-cloud/global/images/ubuntu-minimal-2004-focal-v20220203
+  docker_image: asia-south1-docker.pkg.dev/cyberbullying-428016/abhishek/abhishek-data-processing:5ec70e7c-8933-41ae-94ed-6cfcf2649e35
+  docker_args: '--log-driver=gcplogs
+
+    '
+  extra_bootstrap:
+  - gcloud auth configure-docker --quiet asia-soutj1-docker.pkg.dev
+  ngpus: 0
+  gpu_type: null
+  filesystem_size: 50
+  disk_type: pd-standard
+  on_host_maintenance: TERMINATE
+  worker_class: dask.distributed.Nanny
+  worker_options:
+    nthreads: 1
+  env_vars: {}
+  scheduler_options: {}
+  silence_logs: null
+  asynchronous: null
+  security: true
+  preemptible: false
+  debug: false
+  instance_labels: null
+processed_data_save_dir: gs://cyberbullying45/data/processed/{run_tag}
 docker_image_name: asia-south1-docker.pkg.dev/cyberbullying-428016/abhishek/abhishek-data-processing
-docker_image_tag: 33defb93-0d9a-4483-8c22-4a0540d948fa
+docker_image_tag: 5ec70e7c-8933-41ae-94ed-6cfcf2649e35
+run_tag: default_run
+min_nrof_words: 2

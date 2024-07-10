@@ -107,6 +107,7 @@ def save_config_as_pickle(config: Any, save_path: str) -> None:
 
 def custom_instantiate(config: Any) -> Any:
     config_as_dict = asdict(config)
+    print(config_as_dict)
     if "_target_" not in config_as_dict:
         raise ValueError("Config does not have _target_ key")
 
@@ -124,3 +125,4 @@ def custom_instantiate(config: Any) -> Any:
     if _partial_:
         return partial(_class, **config_as_dict)
     return _class(**config_as_dict)
+

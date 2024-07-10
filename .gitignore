@@ -139,3 +139,5 @@ dmypy.json
 
 data/
 ./abhishek/process_data.py
+creds/
+main.py
